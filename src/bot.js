@@ -44,22 +44,16 @@ const serverPanel = new EmbedBuilder()
 client.once(Events.ClientReady, (readyClient) => {
 	const channel = client.channels.cache.get(discordChannel)
 
-	if(!channel){ 
-		console.error(`Channel with ID "${DISCORD_CHANNEL}" not found!`);
-		console.error(`   The bot couldn't find this channel.`);
-		console.error(`   • The channel ID is incorrect`);
-		console.error(`   • The bot doesn't have access to that channel`);
-		console.error(`   • The channel is in a different server`);
-		console.error(`   Please check your .env file and try again.`);
-		process.exit(1)
-	};
-	console.log(channel.type)
-	if(channel.type !== ChannelType.GuildText){
-		console.error(`Channel with ID ${DISCORD_CHANNEL} is not a text channel`)
-		console.error(`Please set a valid text channel ID`)
-		process.exit(1)
-	} 
-
+	if (!channel) {
+	  console.error(`Channel "${DISCORD_CHANNEL}" not found! Check ID, permissions, or server.`);
+	  process.exit(1);
+	}
+	
+	if (channel.type !== ChannelType.GuildText) {
+	  console.error(`Channel "${DISCORD_CHANNEL}" is not a text channel`);
+	  process.exit(1);
+	}
+	
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 	channel.send({
 		embeds: [serverPanel],
