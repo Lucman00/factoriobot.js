@@ -1,0 +1,19 @@
+{
+  "name": "factoriobot",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "GPL-3.0",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2",
+    "eslint": "^10.5.0",
+    "js-rcon": "^1.1.0"
+  }
+}
