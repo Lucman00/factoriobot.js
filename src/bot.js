@@ -71,6 +71,7 @@ client.once(Events.ClientReady, async (readyClient) => {
 
 	await deleteOldEmbed(client)
 
+<<<<<<< HEAD
 	if(!channel){ 
 		console.error(`Channel with ID "${discordChannel}" not found!`);
 		process.exit(1)
@@ -84,6 +85,21 @@ client.once(Events.ClientReady, async (readyClient) => {
 	
 	panelMessage = await channel.send({
 		embeds: [buildServerPanel()],
+=======
+	if (!channel) {
+		console.error(`Channel "${DISCORD_CHANNEL}" not found! Check ID, permissions, or server.`);
+		process.exit(1);
+	}
+	
+	if (channel.type !== ChannelType.GuildText) {
+		console.error(`Channel "${DISCORD_CHANNEL}" is not a text channel`);
+		process.exit(1);
+	}
+	
+	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+	channel.send({
+		embeds: [serverPanel],
+>>>>>>> 34134f405d071b266bb0273a5f7a5c1b09f16319
 		components: [buttonRow]
 	});   
 	saveEmbed(channel.id, panelMessage.id)
@@ -101,13 +117,18 @@ client.once(Events.ClientReady, async (readyClient) => {
 	}, 60000)
 })
 
+<<<<<<< HEAD
 
 mkdirSync('/opt/factorio/saves/', { recursive: true }, (err) => {
   if (err) {
+=======
+mkdir('/opt/factorio/saves/', { recursive: true }, (err) => {
+	if (err) {
+>>>>>>> 34134f405d071b266bb0273a5f7a5c1b09f16319
     console.error('Failed to create directory:', err);
-  } else {
+	} else {
 
-  }
+	}
 });
 
 client.on(Events.InteractionCreate, async (interaction) =>{
@@ -118,9 +139,13 @@ client.on(Events.InteractionCreate, async (interaction) =>{
 		
 		await interaction.reply({flags: MessageFlags.Ephemeral,
 			components: [saveDropdown(saves)]
+<<<<<<< HEAD
 			
 		 })
 		 
+=======
+		})
+>>>>>>> 34134f405d071b266bb0273a5f7a5c1b09f16319
 	
 	}
 	if (interaction.customId == 'saveSelect'){
