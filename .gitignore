@@ -145,3 +145,4 @@ vite.config.ts.timestamp-*
 .eslintcache
 .eslintrc.json
 .eslintrc.js
+last_embed.json

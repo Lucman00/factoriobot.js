@@ -9,8 +9,20 @@ import {
 from 'discord.js';
 import { buttonRow, saveDropdown } from './actions.js'
 import { discordToken, discordChannel } from './config.js';
-import { readdirSync, access, constants, mkdir } from 'fs'
+import { readdirSync, access, constants, mkdir, writeFileSync, readFileSync} from 'fs'
 
+const STATUS_FILE = './last_embed.json';
+const saveEmbed = (cl, msg) => writeFileSync(STATUS_FILE, JSON.stringify({channelId:cl, messageId:msg}));
+const getEmbed = () => { try { return JSON.parse(readFileSync(STATUS_FILE, 'utf8')); } catch { return null; } };
+const deleteOldEmbed = async (client) => {
+    const data = getEmbed();
+    if (!data) return;
+    try {
+        const channel = await client.channels.fetch(data.channelId);
+        const msg = await channel.messages.fetch(data.messageId);
+        await msg.delete();
+    } catch {}
+};
 
 
 const client = new Client({
@@ -41,8 +53,11 @@ const serverPanel = new EmbedBuilder()
 	.setFooter({ text: 'Last Updated' }) 
 	.setTimestamp()
 	
-client.once(Events.ClientReady, (readyClient) => {
+client.once(Events.ClientReady, async (readyClient) => {
 	const channel = client.channels.cache.get(discordChannel)
+	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+
+	await deleteOldEmbed(client)
 
 	if(!channel){ 
 		console.error(`Channel with ID "${DISCORD_CHANNEL}" not found!`);
@@ -60,11 +75,12 @@ client.once(Events.ClientReady, (readyClient) => {
 		process.exit(1)
 	} 
 
-	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-	channel.send({
+	
+	const message = await channel.send({
 		embeds: [serverPanel],
 		components: [buttonRow]
 	});   
+	saveEmbed(channel.id, message.id)
 })
 
 
@@ -91,7 +107,7 @@ client.on(Events.InteractionCreate, async (interaction) =>{
 	if (interaction.customId == 'saveSelect'){
 		selectedSave = interaction.values[0]
 
-		await interaction.update({content:`Starting server at ${selectedSave}`, components: []})
+		await interaction.update({content:`Starting server at ${selectedSave}`, ephemeral: true, components: []})
 		//start server logic
 
 		setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
