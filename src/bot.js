@@ -45,13 +45,13 @@ client.once(Events.ClientReady, (readyClient) => {
 	const channel = client.channels.cache.get(discordChannel)
 
 	if (!channel) {
-	  console.error(`Channel "${DISCORD_CHANNEL}" not found! Check ID, permissions, or server.`);
-	  process.exit(1);
+		console.error(`Channel "${DISCORD_CHANNEL}" not found! Check ID, permissions, or server.`);
+		process.exit(1);
 	}
 	
 	if (channel.type !== ChannelType.GuildText) {
-	  console.error(`Channel "${DISCORD_CHANNEL}" is not a text channel`);
-	  process.exit(1);
+		console.error(`Channel "${DISCORD_CHANNEL}" is not a text channel`);
+		process.exit(1);
 	}
 	
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
@@ -61,13 +61,12 @@ client.once(Events.ClientReady, (readyClient) => {
 	});   
 })
 
-
 mkdir('/opt/factorio/saves/', { recursive: true }, (err) => {
-  if (err) {
+	if (err) {
     console.error('Failed to create directory:', err);
-  } else {
+	} else {
 
-  }
+	}
 });
 
 const saves = readdirSync('/opt/factorio/saves').filter(f => f.endsWith('.zip'))
@@ -78,8 +77,7 @@ client.on(Events.InteractionCreate, async (interaction) =>{
 	if (interaction.customId == 'start'){
 		await interaction.reply({ephemeral: true,
 			components: [saveDropdown(saves)]
-		 })
-		 
+		})
 	
 	}
 	if (interaction.customId == 'saveSelect'){
